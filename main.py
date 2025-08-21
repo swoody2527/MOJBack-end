@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
 
 
             session.add_all([
-                Task(title="Tesco shop", desc="Milk, Bread, Eggs", status='todo', due=date(2025, 9, 21)),
+                Task(title="Tesco Shop", desc="Milk, Bread, Eggs", status='todo', due=date(2025, 9, 21)),
                 Task(title="CV Fixes", status='todo', due=date(2025, 9, 29)),
                 Task(title="Interview prep", status='todo', due=date(2025, 9, 23)),
             ])
@@ -43,3 +43,12 @@ def get_all_tasks(session: SessionDep):
     if not result:
          raise HTTPException(status_code=404, detail='There are currently no tasks.')
     return result
+
+
+
+@app.get('/task/{task_id}', response_model=Task)
+def get_tasks_by_id(task_id: int, session: SessionDep):
+     task = session.get(Task, task_id)
+     if not task:
+          raise HTTPException(status_code=404, detail=f'No task with id: {task_id}.')
+     return task
