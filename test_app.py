@@ -78,3 +78,17 @@ def test_task_deletion(client):
     get_attempt = client.get('/task/1')
     assert get_attempt.status_code == 404
     assert get_attempt.json()['detail'] == 'No task with id: 1.'
+
+
+def test_update_task_status(client):
+    payload = {'status': 'completed'}
+    response = client.patch('/task/1', json=payload)
+
+    data = response.json()
+
+    print('Response Data: ', data)
+    assert response.status_code == 200
+    assert data['status'] == 'completed'
+
+    get_attempt = client.get('/task/1')
+    assert get_attempt.json()['status'] == 'completed'

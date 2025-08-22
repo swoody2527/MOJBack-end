@@ -71,4 +71,16 @@ def delete_task_by_id(task_id: int, session: SessionDep):
      session.delete(task_to_delete)
      session.commit()
      return {'message': f'Task {task_id} successfully deleted.'}
-     
+
+
+@app.patch('/task/{task_id}', response_model=TaskBase)
+def patch_task_status_by_id(task_id: int, payload: UpdateTaskStatus, session: SessionDep):
+     task_to_patch = session.get(Task, task_id)
+     if not task_to_patch:
+          raise HTTPException(status_code=404, detail=f'Status update failed. No task with id: {task_id}.')
+     task_to_patch.status = payload.status
+     session.add(task_to_patch)
+     session.commit()
+     session.refresh(task_to_patch)
+
+     return task_to_patch
