@@ -68,3 +68,13 @@ def test_post_new_task(client):
     assert get_attempt.status_code == 200
 
 
+def test_task_deletion(client):
+    response = client.delete('/task/1')
+
+    data = response.json()
+    assert response.status_code == 200
+    assert data['message'] == 'Task 1 successfully deleted.'
+
+    get_attempt = client.get('/task/1')
+    assert get_attempt.status_code == 404
+    assert get_attempt.json()['detail'] == 'No task with id: 1.'

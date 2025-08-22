@@ -61,3 +61,14 @@ def post_new_task(payload: TaskBase, session: SessionDep):
      session.commit()
      session.refresh(db_task)
      return db_task
+
+
+@app.delete('/task/{task_id}')
+def delete_task_by_id(task_id: int, session: SessionDep):
+     task_to_delete = session.get(Task, task_id)
+     if not task_to_delete:
+          raise HTTPException(status_code=404, detail=f'Delete failed. No task with id: {task_id}')
+     session.delete(task_to_delete)
+     session.commit()
+     return {'message': f'Task {task_id} successfully deleted.'}
+     
