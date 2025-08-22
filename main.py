@@ -52,3 +52,12 @@ def get_tasks_by_id(task_id: int, session: SessionDep):
      if not task:
           raise HTTPException(status_code=404, detail=f'No task with id: {task_id}.')
      return task
+
+
+@app.post('/task', response_model=Task)
+def post_new_task(payload: TaskBase, session: SessionDep):
+     db_task = Task.model_validate(payload)
+     session.add(db_task)
+     session.commit()
+     session.refresh(db_task)
+     return db_task

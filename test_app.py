@@ -45,4 +45,26 @@ def test_get_task_by_invalid_id(client):
     assert data['detail'] == 'No task with id: 1000.'
 
 
+def test_post_new_task(client):
+    payload = {
+        'title': 'Example Task Title',
+        'desc': 'Example Description',
+        'status': 'Example Status',
+        'due': '2025-10-01'
+    }
+
+    response = client.post('/task', json=payload)
+
+    data = response.json()
+
+    assert response.status_code == 200
+    assert "id" in data and isinstance(data["id"], int)
+    assert data["title"] == payload["title"]
+    assert data["desc"] == payload["desc"]
+    assert data["status"] == payload["status"]
+    assert data["due"] == payload["due"]
+
+    get_attempt = client.get(f'/task/{data['id']}')
+    assert get_attempt.status_code == 200
+
 
