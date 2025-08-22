@@ -64,7 +64,7 @@ def test_post_new_task(client):
     assert data["status"] == payload["status"]
     assert data["due"] == payload["due"]
 
-    get_attempt = client.get(f'/task/{data['id']}')
+    get_attempt = client.get(f"/task/{data['id']}")
     assert get_attempt.status_code == 200
 
 
@@ -86,7 +86,6 @@ def test_update_task_status(client):
 
     data = response.json()
 
-    print('Response Data: ', data)
     assert response.status_code == 200
     assert data['status'] == 'completed'
 
