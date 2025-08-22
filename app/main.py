@@ -5,6 +5,7 @@ from typing import Annotated, List
 from .models import TaskBase, Task, UpdateTaskStatus
 from datetime import date
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -33,6 +34,18 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+origins = [
+     'http://localhost:5173'
+]
+
+app.add_middleware(
+     CORSMiddleware,
+     allow_origins=origins,
+     allow_credentials=True,
+     allow_methods=["*"],
+     allow_headers=["*"],    
+)
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
