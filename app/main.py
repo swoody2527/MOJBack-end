@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlmodel import SQLModel, Session, select, delete
-from db import engine, get_session
+from .db import engine, get_session
 from typing import Annotated, List
-from models import TaskBase, Task, UpdateTaskStatus
+from .models import TaskBase, Task, UpdateTaskStatus
 from datetime import date
 from contextlib import asynccontextmanager
 
